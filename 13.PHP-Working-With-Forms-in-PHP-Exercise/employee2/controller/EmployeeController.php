@@ -15,19 +15,19 @@ class EmployeeController extends Controller {
     }
 
     public function addProjects() {
-        $get= $this->inputGet($_GET);
-        $post= $this->inputPost($_POST);
-        
+        $get = $this->inputGet($_GET);
+        $post = $this->inputPost($_POST);
+
         $action = "?controller=EmployeeController&action=addProjects";
         $action .= (!empty($get['employee_id'])) ? '&employee_id=' . $get['employee_id'] : '';
-        if (isset($get['emplyee_id']) and isset($post['save'])) {
+        if (isset($get['emplyee_id']) and isset($post['save'])and $post['save'] != null) {
             $m = new ProjectsModel($this->db);
             $res = $m->create($post);
             $this->loadView("header.php");
             $this->loadView("employee/save_project.php", ['res' => $res]);
             $this->loadView("footer.php");
         }
-        if (isset($post['cancel'])) {
+        if (isset($post['cancel']) and $post['cancel'] != null) {
             header("Location:?controller=EmployeeController&action=view");
         }
         $this->loadView("header.php");
@@ -36,7 +36,7 @@ class EmployeeController extends Controller {
     }
 
     public function viewProjects() {
-        $get= $this->inputGet($_GET);
+        $get = $this->inputGet($_GET);
         $action = "?controller=EmployeeController&action=viewProjects";
         $action .= (!empty($get['employee_id'])) ? '&emplyee_id=' . $get['employee_id'] : '';
         if (isset($get['employee_id'])) {
@@ -47,8 +47,9 @@ class EmployeeController extends Controller {
             $this->loadView("footer.php");
         }
     }
+
     public function viewAddresses() {
-        $get= $this->inputGet($_GET);
+        $get = $this->inputGet($_GET);
         $action = "?controller=EmployeeController&action=viewAddresses";
         $action .= (!empty($get['employee_id'])) ? '&emplyee_id=' . $get['employee_id'] : '';
         if (isset($get['employee_id'])) {
