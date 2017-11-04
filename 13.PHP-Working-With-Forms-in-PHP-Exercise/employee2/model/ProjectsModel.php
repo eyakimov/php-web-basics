@@ -12,20 +12,19 @@ class ProjectsModel extends Model {
             $this->db->beginTransaction();
             $db_stm = $this->db->prepare("INSERT INTO `" . $this->table . "` "
                     . "(`name`,`description`,`end_date`) "
-                    . "VALUES(:name,:description,:end_date);");
-
-            $db_stm->bindParam(":name", $project['name']);
-            $db_stm->bindParam(":description", $project['description']);
-            $db_stm->bindParam(":end_date", $project['end_date']);
+                    . "VALUES (?,?,?);");
+            $db_stm->bindParam(1, $project['name']);
+            $db_stm->bindParam(2, $project['description']);
+            $db_stm->bindParam(3, $project['end_date']);
             $db_stm->execute();
-            $project_id = $db_stm->lastInsertId();
+            $project_id = $this->db->lastInsertId();
             $db_stm = $this->db->prepare("INSERT INTO `employees_projects` "
                     . "(`employee_id`, `project_id`) "
-                    . "VALUES(:empl_id, :pr_id);");
+                    . "VALUES (:empl_id, :pr_id);");
             $db_stm->bindParam(":empl_id", $project['employee_id']);
             $db_stm->bindParam(":pr_id", $project_id);
             $db_stm->execute();
-            if ($db->commit()) {
+            if ($this->db->commit()) {
                 return 'Project "' . $project['name'] . '" for employee ID'
                         . $project['employee_id'] . ' save in database';
             }

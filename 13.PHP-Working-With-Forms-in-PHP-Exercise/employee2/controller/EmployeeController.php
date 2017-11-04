@@ -20,8 +20,9 @@ class EmployeeController extends Controller {
 
         $action = "?controller=EmployeeController&action=addProjects";
         $action .= (!empty($get['employee_id'])) ? '&employee_id=' . $get['employee_id'] : '';
-        if (isset($get['emplyee_id']) and isset($post['save'])and $post['save'] != null) {
+        if (isset($get['employee_id']) and isset($post['save']) and $post['save'] != null) {
             $m = new ProjectsModel($this->db);
+            $post['employee_id']=$get['employee_id'];
             $res = $m->create($post);
             $this->loadView("header.php");
             $this->loadView("employee/save_project.php", ['res' => $res]);
